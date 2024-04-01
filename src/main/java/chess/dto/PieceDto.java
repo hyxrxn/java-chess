@@ -2,6 +2,7 @@ package chess.dto;
 
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
+import chess.domain.piece.Team;
 
 public class PieceDto {
 
@@ -26,5 +27,16 @@ public class PieceDto {
 
     public boolean isBlack() {
         return isBlack;
+    }
+
+    public String getType() {
+        return type.toString();
+    }
+
+    public String getTeam() {
+        if (isBlack) {
+            return Team.BLACK.toString();
+        }
+        return Team.WHITE.toString();
     }
 }

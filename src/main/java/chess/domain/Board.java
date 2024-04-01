@@ -17,8 +17,12 @@ public class Board {
     private Team turn;
 
     public Board(Map<Position, Piece> board) {
+        this(board, Team.WHITE);
+    }
+
+    public Board(Map<Position, Piece> board, Team turn) {
         this.board = new HashMap<>(board);
-        this.turn = Team.WHITE;
+        this.turn = turn;
     }
 
     public Optional<Piece> find(Position position) {
@@ -100,5 +104,9 @@ public class Board {
                 .filter(entry -> entry.getValue().isSameTeam(team))
                 .filter(entry -> entry.getValue().isPawn())
                 .map(Entry::getKey);
+    }
+
+    public Team getTurn() {
+        return turn;
     }
 }

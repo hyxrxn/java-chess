@@ -33,7 +33,7 @@ public class ChessGame {
     private void start() {
         GameCommand command = inputView.readCommand();
         if (command == GameCommand.START) {
-            Board board = BoardFactory.createInitialBoard();
+            Board board = getBoard();
             showBoard(board);
             play(board);
             return;
@@ -41,6 +41,14 @@ public class ChessGame {
         if (GameCommand.isImpossibleBeforeStartGame(command)) {
             throw new IllegalArgumentException("아직 게임을 시작하지 않았습니다.");
         }
+    }
+
+    private Board getBoard() {
+        BoardDao boardDao = new BoardDao();
+        if (boardDao.isExistBoard(1)) {
+            return boardDao.loadBoard(1);
+        }
+        return BoardFactory.createInitialBoard();
     }
 
     private void play(Board board) {
@@ -66,12 +74,23 @@ public class ChessGame {
             throw new IllegalArgumentException("이미 게임을 시작했습니다.");
         }
         if (command == GameCommand.END) {
-            return GameStatus.END;
+            return endGame(board);
         }
         if (command == GameCommand.STATUS) {
             return showStatus(board);
         }
         return executeMove(board);
+    }
+
+    private GameStatus endGame(Board board) {
+        BoardDao boardDao = new BoardDao();
+        boardDao.delete(1);
+
+        BoardDto boardDto = BoardDto.of(board);
+        boardDao.addGame(1, boardDto);
+        boardDao.addBoard(1, boardDto);
+
+        return GameStatus.END;
     }
 
     private GameStatus showStatus(Board board) {
@@ -92,6 +111,8 @@ public class ChessGame {
         showBoard(board);
         if (gameStatus != GameStatus.PLAYING) {
             outputView.printWinner(gameStatus);
+            BoardDao boardDao = new BoardDao();
+            boardDao.delete(1);
         }
         return gameStatus;
     }

@@ -67,4 +67,12 @@ public class Position {
     public int hashCode() {
         return Objects.hash(rank, file);
     }
+
+    public String getFile() {
+        return file.toString();
+    }
+
+    public String getRank() {
+        return rank.toString();
+    }
 }

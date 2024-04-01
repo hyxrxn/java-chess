@@ -31,6 +31,4 @@ out/
 ### VS Code ###
 .vscode/
 
-db/
-
-docker-compose.yml
+db/mysql/data/
